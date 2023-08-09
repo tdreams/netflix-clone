@@ -16,6 +16,7 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
       const result = await useAddFavorite(movieId);
       if (result) {
         console.log("Movie added to favorites", result);
+        setIsAdded(true);
       } else {
         console.log("Failed to add movie to favorites");
       }
@@ -23,9 +24,6 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
       setError("Failed to add movie to favorites.Please try again");
     }
   };
-  useEffect(() => {
-    handleAddFavorite();
-  }, []);
 
   return (
     <div>

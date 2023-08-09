@@ -1,41 +1,25 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import fetchMovies from "@/hooks/useMovieList";
-import { Movie } from "@/types";
-import { BsFillPlayFill } from "react-icons/bs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import Image from "next/image";
 import FavoriteButton from "./FavoriteButton";
+import useFavorites from "@/hooks/useFavorites";
+import { Movie } from "@/types";
+import { Card, CardContent, CardDescription } from "@/components/ui/card";
+import { BsFillPlayFill } from "react-icons/bs";
 
-interface MovieProps {
+interface FavoritesProps {
   title: string;
 }
 
-const Movies = ({ title }: MovieProps) => {
-  const [movies, setMovies] = useState<Movie[] | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isError, setIsError] = useState(false);
+const Favorites = ({ title }: FavoritesProps) => {
+  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedMovies = await fetchMovies();
-      console.log(fetchedMovies);
-      if (fetchedMovies) {
-        setMovies(fetchedMovies);
-        setIsLoading(false); // Set loading to false when data is fetched
-      } else {
-        setIsError(true);
-        setIsLoading(false); // Set loading to false on error as well
-      }
+    const fetchFavoriteMovies = async () => {
+      const favoriteMoviesList = await useFavorites();
+      setFavoriteMovies(favoriteMoviesList);
     };
-    fetchData();
+
+    fetchFavoriteMovies();
   }, []);
 
   return (
@@ -43,11 +27,9 @@ const Movies = ({ title }: MovieProps) => {
       <div className="text-white text-base md:text-xl lg:text-2xl font-semibold">
         <p>{title}</p>
       </div>
-      <div className="grid grid-cols-4 gap-2 ">
-        {isLoading ? ( // Check for loading state before rendering
-          <p>Loading Movies...</p>
-        ) : (
-          movies?.map((movie) => (
+      <div className="grid grid-cols-4 gap-2">
+        {favoriteMovies.length > 0 ? (
+          favoriteMovies.map((movie) => (
             <Card
               key={movie.id}
               className=" bg-zinc-900 col-span-1 h-[12vw] relative  group border-0 transition-transform duration-300 "
@@ -88,10 +70,12 @@ const Movies = ({ title }: MovieProps) => {
               </div>
             </Card>
           ))
+        ) : (
+          <p>No favorite movies added yet.</p>
         )}
       </div>
     </div>
   );
 };
 
-export default Movies;
+export default Favorites;
