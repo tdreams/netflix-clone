@@ -1,0 +1,101 @@
+"use client";
+
+import React, { useState, useEffect, use } from "react";
+import fetchMovies from "@/hooks/useMovieList";
+import { Movie } from "@/types";
+import { BsFillPlayFill } from "react-icons/bs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import Image from "next/image";
+import FavoriteButton from "./FavoriteButton";
+
+interface MovieProps {
+  title: string;
+  data: Movie[];
+}
+
+const Movies = ({ title, data }: MovieProps) => {
+  const [movies, setMovies] = useState<Movie[] | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const fetchedMovies = await fetchMovies();
+      console.log(fetchedMovies);
+      if (fetchedMovies) {
+        setMovies(fetchedMovies);
+      } else {
+        setIsError(true);
+      }
+      setIsLoading(false);
+    };
+    fetchData();
+  }, []);
+
+  if (isError) {
+    return <p>Error loading data</p>;
+  }
+  return (
+    <div className="px-4 md:px-12 mt-4 space-y-8">
+      <div className="text-white text-base md:text-xl lg:text-2xl font-semibold">
+        <p>{title}</p>
+      </div>
+      <div className="grid grid-cols-4 gap-2 ">
+        {movies ? (
+          movies.map((movie) => (
+            <Card
+              key={movie.id}
+              className=" bg-zinc-900 col-span-1 h-[12vw] relative  group border-0 transition-transform duration-300 "
+            >
+              <img
+                src={movie.thumbnailUrl}
+                alt="Thumbnail"
+                className="w-full h-full object-cover cursor-pointer transition duration-0 shadow-xl group-hover:opacity-0 sm:group-hover:opacity-0 delay-300 rounded-md"
+              />
+              <div className="opacity-0 absolute top-0 transition duration-300 z-10 invisible sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100 ">
+                <img
+                  src={movie.thumbnailUrl}
+                  alt="Thumbnail"
+                  className="cursor-pointer object-cover transition duration shadow-xl rounded-t-md w-full h-[12vw]"
+                />
+                <CardContent className="z-10 bg-zinc-800 p-2 lg:p-4 absolute w-full transition shadow-md rounded-b-md">
+                  <div className="flex flex-row items-center gap-3">
+                    <div
+                      className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300"
+                      onClick={() => {}}
+                    >
+                      <BsFillPlayFill size={20} />
+                    </div>
+                    <FavoriteButton movieId={movie?.id} />
+                  </div>
+                  <p className="text-red-400 font-semibold mt-4">
+                    New <span className="text-white">2023</span>
+                  </p>
+                  <CardDescription>
+                    <p className="text-white text-[10px] lg:text-sm">
+                      {movie.duration}
+                    </p>
+                    <p className="text-white text-[10px] lg:text-sm">
+                      {movie.genre}
+                    </p>
+                  </CardDescription>
+                </CardContent>
+              </div>
+            </Card>
+          ))
+        ) : (
+          <p>Loading Movies...</p>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default Movies;

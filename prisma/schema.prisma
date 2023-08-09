@@ -21,3 +21,8 @@ model Movie {
   genre String
   duration String
 }
+
+model User {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  favoriteMovieIds  String[] @db.ObjectId
+}

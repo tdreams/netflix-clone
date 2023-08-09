@@ -12,6 +12,7 @@
     "@clerk/nextjs": "^4.23.2",
     "@prisma/client": "^5.1.1",
     "@radix-ui/react-navigation-menu": "^1.1.3",
+    "@radix-ui/react-slot": "^1.0.2",
     "@types/node": "20.4.8",
     "@types/react": "18.2.18",
     "@types/react-dom": "18.2.7",
@@ -21,6 +22,7 @@
     "clsx": "^2.0.0",
     "eslint": "8.46.0",
     "eslint-config-next": "13.4.12",
+    "lodash": "^4.17.21",
     "lucide-react": "^0.263.1",
     "next": "13.4.12",
     "postcss": "8.4.27",
@@ -34,6 +36,7 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@types/lodash": "^4.14.196",
     "prisma": "^5.1.1"
   }
 }

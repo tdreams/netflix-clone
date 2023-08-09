@@ -1,40 +1,17 @@
-/* import useSWR from "swr";
-import fetcher from "@/lib/fetcher";
-
-const useBillboard = () => {
-  const { data, error, isLoading } = useSWR(
-    "http://localhost:3000/random",
-    fetcher,
-    {
-      revalidateIfStale: false,
-      revalidateOnFocus: false,
-      revalidateOnReconnect: false,
-    }
-  );
-  return {
-    data,
-    error,
-    isLoading,
-  };
-};
-
-export default useBillboard;
- */
-// hooks/useBillboard.ts
-import useSWR from "swr";
 import axios from "axios";
+import { Movie } from "@/types";
 
-const fetchBillboard = async (url: string) => {
-  const response = await axios.get(url);
-  return response.data;
+const fetchRandomMovie = async () => {
+  try {
+    const response = await axios.get("http://localhost:3000/api/random");
+    if (response.data.length > 0) {
+      const randomMovie: Movie = response.data[0];
+      return randomMovie;
+    }
+  } catch (e) {
+    console.error("Error fetching data", e);
+  }
+  return null;
 };
 
-export const useBillboard = () => {
-  const { data, error } = useSWR("/api/random", fetchBillboard);
-
-  return {
-    data,
-    isLoading: !error && !data,
-    isError: error,
-  };
-};
+export default fetchRandomMovie;
