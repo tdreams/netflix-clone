@@ -11,18 +11,30 @@ datasource db {
 }
 
 
-
 model Movie {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  title String
+  id          String @id @default(auto()) @map("_id") @db.ObjectId
+  title       String
   description String
-  videoUrl String
+  videoUrl    String
   thumbnailUrl String
-  genre String
-  duration String
+  genre       String
+  duration    String
+  users       UserMovie[]
 }
 
 model User {
-  id                String   @id @default(auto()) @map("_id") @db.ObjectId
-  favoriteMovieIds  String[] @db.ObjectId
+  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  externalId        String @unique
+  attributes Json
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  favoriteMovies UserMovie[]
+}
+
+model UserMovie {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  userId  String @db.ObjectId
+  movieId String @db.ObjectId
+  user    User   @relation(fields: [userId], references: [id],onDelete: Cascade)
+  movie   Movie  @relation(fields: [movieId], references: [id], onDelete: Cascade)
 }
