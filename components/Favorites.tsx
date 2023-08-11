@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import FavoriteButton from "./FavoriteButton";
-import useFavorites from "@/hooks/useFavorites";
+import UseFavorites from "@/hooks/useFavorites";
 import { Movie } from "@/types";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -20,7 +20,7 @@ const Favorites = ({ title }: FavoritesProps) => {
   const { openModal } = useInfoModal();
   useEffect(() => {
     const fetchFavoriteMovies = async () => {
-      const favoriteMoviesList = await useFavorites();
+      const favoriteMoviesList = await UseFavorites();
       setFavoriteMovies([...favoriteMoviesList]);
     };
 

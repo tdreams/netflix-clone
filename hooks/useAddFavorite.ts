@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const useAddFavorite = async (movieId: string) => {
+const UseAddFavorite = async (movieId: string | undefined) => {
   try {
     const response = await axios.post(
       "http://localhost:3000/api/favorites/add",
@@ -17,4 +17,4 @@ const useAddFavorite = async (movieId: string) => {
   return null;
 };
 
-export default useAddFavorite;
+export default UseAddFavorite;

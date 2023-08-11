@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const useRemoveFavorite = async (movieId: string) => {
+const UseRemoveFavorite = async (movieId: string | undefined) => {
   try {
     const response = await axios.delete(
       "http://localhost:3000/api/favorites/remove",
@@ -17,4 +17,4 @@ const useRemoveFavorite = async (movieId: string) => {
   return null;
 };
 
-export default useRemoveFavorite;
+export default UseRemoveFavorite;

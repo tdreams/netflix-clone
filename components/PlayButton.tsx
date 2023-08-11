@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "./ui/button";
 
 interface PlayButtonProps {
-  movieId: string;
+  movieId: string | undefined;
 }
 
 const PlayButton: React.FC<PlayButtonProps> = ({ movieId }) => {

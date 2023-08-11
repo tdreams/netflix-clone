@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Movie } from "@/types";
 
-const useMovie = async (movieId: string) => {
+const UseMovie = async (movieId: string | undefined) => {
   try {
     const response = await axios.get(`/api/movies/${movieId}`);
     if (response.status === 200) {
@@ -14,4 +14,4 @@ const useMovie = async (movieId: string) => {
   return null;
 };
 
-export default useMovie;
+export default UseMovie;

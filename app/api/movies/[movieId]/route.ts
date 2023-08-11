@@ -4,7 +4,7 @@ import { auth } from "@clerk/nextjs";
 
 export async function GET(
   req: Request,
-  { params }: { params: { movieId: string } }
+  { params }: { params: { movieId: string | undefined } }
 ) {
   try {
     const { userId } = auth();
@@ -17,18 +17,14 @@ export async function GET(
 
     const movieId = params.movieId;
 
-    /* console.log("there is the movieId", movieId); */
-    if (movieId === null) {
+    if (movieId === undefined) {
       return new NextResponse("Missing movieId in query parameters", {
         status: 400,
       });
     }
 
     if (typeof movieId !== "string") {
-      throw new Error("Invalid ID");
-    }
-    if (!movieId) {
-      return new NextResponse("Missing movieId in query parameters", {
+      return new NextResponse("Invalid movieId format", {
         status: 400,
       });
     }
@@ -59,7 +55,7 @@ export async function GET(
       });
     }
 
-    return NextResponse.json(movie, {
+    return new NextResponse(JSON.stringify(movie), {
       headers: {
         "Content-Type": "application/json",
       },

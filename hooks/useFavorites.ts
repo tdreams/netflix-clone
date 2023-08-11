@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Movie } from "@/types";
 
-const useFavorites = async () => {
+const UseFavorites = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/favorites");
     //console.log("list Favorites", response.data);
@@ -15,4 +15,4 @@ const useFavorites = async () => {
   return [];
 };
 
-export default useFavorites;
+export default UseFavorites;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import { Movie } from "@/types";
 
-const fetchMovies = async () => {
+const FetchMovies = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/movies");
     if (response.data.length > 0) {
@@ -14,4 +14,4 @@ const fetchMovies = async () => {
   return null;
 };
 
-export default fetchMovies;
+export default FetchMovies;

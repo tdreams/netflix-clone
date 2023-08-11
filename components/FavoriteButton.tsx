@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
-import useAddFavorite from "@/hooks/useAddFavorite";
-import useRemoveFavorite from "@/hooks/useRemoveFavorite";
+import UseAddFavorite from "@/hooks/useAddFavorite";
+import UseRemoveFavorite from "@/hooks/useRemoveFavorite";
 import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai";
-import useFavorites from "@/hooks/useFavorites";
+import UseFavorites from "@/hooks/useFavorites";
 
 interface FavoriteButtonProps {
-  movieId: string;
+  movieId: string | undefined;
 }
 
 const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
@@ -15,7 +15,7 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
   useEffect(() => {
     const checkIfMovieIsAdded = async () => {
       try {
-        const favoritesMovies = await useFavorites();
+        const favoritesMovies = await UseFavorites();
         const isMovieInFavorites = favoritesMovies.some(
           (movie) => movie.id === movieId
         );
@@ -31,7 +31,7 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
     try {
       if (isAdded) {
         //Remove the movie from favorites
-        const remove = await useRemoveFavorite(movieId);
+        const remove = await UseRemoveFavorite(movieId);
         if (remove) {
           setIsAdded(false);
         } else {
@@ -39,7 +39,7 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
         }
       } else {
         //Add the movie to favorites
-        const add = await useAddFavorite(movieId);
+        const add = await UseAddFavorite(movieId);
         if (add) {
           setIsAdded(true);
         } else {

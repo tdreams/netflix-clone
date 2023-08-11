@@ -1,19 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useCallback } from "react";
-import fetchRandomMovie from "@/hooks/useBillboard";
+import FetchRandomMovie from "@/hooks/useBillboard";
 import { Movie } from "@/types";
 import { Button } from "./ui/button";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import PlayButton from "./PlayButton";
-import useInfoModal from "@/hooks/useInfoModel";
+import UseInfoModal from "@/hooks/useInfoModel";
 
 const Billboard = () => {
   const [randomMovie, setRandomMovie] = useState<Movie | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const { openModal } = useInfoModal();
+  const { openModal } = UseInfoModal();
 
   const handleOpenModal = useCallback(() => {
     if (randomMovie?.id) {
@@ -24,7 +24,7 @@ const Billboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movie = await fetchRandomMovie();
+      const movie = await FetchRandomMovie();
       if (movie) {
         setRandomMovie(movie);
       } else {

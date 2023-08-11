@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import fetchMovies from "@/hooks/useMovieList";
+import FetchMovies from "@/hooks/useMovieList";
 import { Movie } from "@/types";
 import { useRouter } from "next/navigation";
 import { BsFillPlayFill } from "react-icons/bs";
@@ -32,7 +32,7 @@ const Movies = ({ title }: MovieProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedMovies = await fetchMovies();
+      const fetchedMovies = await FetchMovies();
       //console.log(fetchedMovies);
       if (fetchedMovies) {
         setMovies(fetchedMovies);

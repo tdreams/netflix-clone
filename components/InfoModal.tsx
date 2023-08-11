@@ -5,7 +5,7 @@ import { AiOutlineClose } from "react-icons/ai";
 import PlayButton from "./PlayButton";
 import FavoriteButton from "./FavoriteButton";
 import useInfoModal from "@/hooks/useInfoModel";
-import useMovie from "@/hooks/useMovie";
+import UseMovie from "@/hooks/useMovie";
 import { Movie } from "@/types";
 import { cn } from "@/lib/utils";
 
@@ -21,7 +21,7 @@ const InfoModal = ({ visible, onClose }: InfoModalProps) => {
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const fetchedMovie = await useMovie(movieId);
+      const fetchedMovie = await UseMovie(movieId);
       setMovie(fetchedMovie);
     };
 
