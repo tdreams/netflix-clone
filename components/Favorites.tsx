@@ -5,23 +5,25 @@ import useFavorites from "@/hooks/useFavorites";
 import { Movie } from "@/types";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { BsFillPlayFill } from "react-icons/bs";
+import { useRouter } from "next/navigation";
 
 interface FavoritesProps {
   title: string;
 }
 
 const Favorites = ({ title }: FavoritesProps) => {
+  const router = useRouter();
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
 
   useEffect(() => {
     const fetchFavoriteMovies = async () => {
       const favoriteMoviesList = await useFavorites();
-      setFavoriteMovies(favoriteMoviesList);
+      setFavoriteMovies([...favoriteMoviesList]);
     };
 
     fetchFavoriteMovies();
-  }, []);
-  console.log("Favorite Movies Array:", favoriteMovies);
+  }, [favoriteMovies]);
+  //console.log("Favorite Movies Array:", favoriteMovies);
   return (
     <div className="px-4 md:px-12 mt-4 space-y-8">
       <div className="text-white text-base md:text-xl lg:text-2xl font-semibold">
@@ -49,7 +51,9 @@ const Favorites = ({ title }: FavoritesProps) => {
                   <div className="flex flex-row items-center gap-3">
                     <div
                       className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300"
-                      onClick={() => {}}
+                      onClick={() => {
+                        router.push(`/watch/${movie?.id}`);
+                      }}
                     >
                       <BsFillPlayFill size={20} />
                     </div>
