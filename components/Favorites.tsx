@@ -6,6 +6,8 @@ import { Movie } from "@/types";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { BsFillPlayFill } from "react-icons/bs";
 import { useRouter } from "next/navigation";
+import useInfoModal from "@/hooks/useInfoModel";
+import { BiChevronDown } from "react-icons/bi";
 
 interface FavoritesProps {
   title: string;
@@ -15,6 +17,7 @@ const Favorites = ({ title }: FavoritesProps) => {
   const router = useRouter();
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
 
+  const { openModal } = useInfoModal();
   useEffect(() => {
     const fetchFavoriteMovies = async () => {
       const favoriteMoviesList = await useFavorites();
@@ -58,7 +61,17 @@ const Favorites = ({ title }: FavoritesProps) => {
                       <BsFillPlayFill size={20} />
                     </div>
                     <FavoriteButton movieId={movie?.id} />
+                    <div
+                      className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
+                      onClick={() => openModal(movie?.id)}
+                    >
+                      <BiChevronDown
+                        size={30}
+                        className="text-white group-hover/item:text-neutral-300"
+                      />
+                    </div>
                   </div>
+
                   <p className="text-red-400 font-semibold mt-4">
                     New <span className="text-white">2023</span>
                   </p>

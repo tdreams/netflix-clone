@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
 export interface ModalStoreInterface {
-  movieId?: string;
-  isOpen?: boolean;
+  movieId?: string | undefined;
+  isOpen: boolean;
   openModal: (movieId: string) => void;
   closeModal: () => void;
 }

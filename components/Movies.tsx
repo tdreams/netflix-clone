@@ -4,6 +4,8 @@ import fetchMovies from "@/hooks/useMovieList";
 import { Movie } from "@/types";
 import { useRouter } from "next/navigation";
 import { BsFillPlayFill } from "react-icons/bs";
+import { BiChevronDown } from "react-icons/bi";
+
 import {
   Card,
   CardContent,
@@ -12,8 +14,9 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import Image from "next/image";
+
 import FavoriteButton from "./FavoriteButton";
+import useInfoModal from "@/hooks/useInfoModel";
 
 interface MovieProps {
   title: string;
@@ -24,6 +27,8 @@ const Movies = ({ title }: MovieProps) => {
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+
+  const { openModal } = useInfoModal();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,6 +81,15 @@ const Movies = ({ title }: MovieProps) => {
                       <BsFillPlayFill size={20} />
                     </div>
                     <FavoriteButton movieId={movie?.id} />
+                    <div
+                      className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
+                      onClick={() => openModal(movie?.id)}
+                    >
+                      <BiChevronDown
+                        size={30}
+                        className="text-white group-hover/item:text-neutral-300"
+                      />
+                    </div>
                   </div>
                   <p className="text-red-400 font-semibold mt-4">
                     New <span className="text-white">2023</span>

@@ -4,8 +4,10 @@ import Billboard from "@/components/Billboard";
 import Movies from "@/components/Movies";
 import Favorites from "@/components/Favorites";
 import InfoModal from "@/components/InfoModal";
+import { currentUser } from "@clerk/nextjs";
 
 const rootPage = async () => {
+  const user = await currentUser();
   return (
     <>
       <Navbar />
