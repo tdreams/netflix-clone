@@ -4,9 +4,9 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET() {
   try {
-    const { userId } = auth();
+    const { getToken } = auth();
 
-    if (!userId) {
+    if (!getToken) {
       return new NextResponse("Unauthorized", {
         status: 401,
       });
