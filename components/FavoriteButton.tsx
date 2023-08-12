@@ -5,7 +5,6 @@ import { AiOutlinePlus } from "react-icons/ai";
 
 interface FavoriteButtonProps {
   movieId: string | undefined;
-  onClick: () => Promise<void>;
 }
 
 const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {

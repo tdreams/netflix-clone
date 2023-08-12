@@ -25,10 +25,6 @@ const Favorites = ({ title }: FavoritesProps) => {
     fetchFavoriteMovies();
   }, []);
 
-  const handleFavoriteUpdated = async () => {
-    // Fetch favorite movies again when a movie is added/removed
-    await fetchFavoriteMovies();
-  };
   console.log("Favorite Movies Array:", favoriteMovies);
   return (
     <div className="px-4 md:px-12 mt-4 space-y-8">
@@ -61,10 +57,7 @@ const Favorites = ({ title }: FavoritesProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton
-                      movieId={movie?.id}
-                      onClick={handleFavoriteUpdated}
-                    />
+                    <FavoriteButton movieId={movie?.id} />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
                       onClick={() => {}}
