@@ -6,7 +6,7 @@ import { NextResponse } from "next/server";
 const UseFavorites = async () => {
   try {
     const user = await currentUser();
-    if (!user) {
+    if (!user?.id || !user?.username) {
       return new NextResponse("Missing userId in query parameters", {
         status: 400,
       });
