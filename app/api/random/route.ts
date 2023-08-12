@@ -4,14 +4,13 @@ import prismadb from "@/lib/prismadb";
 
 export async function GET() {
   try {
-    /* const { userId } = auth();
-    const user = await currentUser();
+    const { userId } = auth();
 
-    if (!userId || !user) {
+    if (!userId) {
       return new NextResponse("Unauthorized", {
         status: 401,
       });
-    } */
+    }
 
     const moviesCount = await prismadb.movie.count();
     const randomIndex = Math.floor(Math.random() * moviesCount);
