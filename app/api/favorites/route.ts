@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+import { auth, currentUser } from "@clerk/nextjs";
 
 export async function GET(req: Request) {
   try {
@@ -8,18 +8,18 @@ export async function GET(req: Request) {
     /* const queryParams = new URLSearchParams(req.url.split("?")[1]);
     const userId = queryParams.get("userId"); */
 
-    const { userId } = auth();
+    const user = await currentUser();
 
-    if (!userId) {
+    if (!user) {
       return new NextResponse("Missing userId in query parameters", {
         status: 400,
       });
     }
 
     // Find the user in the database
-    const user = await prismadb.user.findUnique({
+    const userdb = await prismadb.user.findUnique({
       where: {
-        externalId: userId,
+        externalId: user.id,
       },
       include: {
         favoriteMovies: {
@@ -30,13 +30,13 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!user) {
+    if (!userdb) {
       return new NextResponse("User not found", {
         status: 404,
       });
     }
 
-    const favoriteMovies = user.favoriteMovies.map(
+    const favoriteMovies = userdb.favoriteMovies.map(
       (userMovie) => userMovie.movie
     );
 
