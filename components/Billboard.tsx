@@ -13,7 +13,7 @@ const Billboard = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const movie = await FetchRandomMovie();
+      const movie = await fetchRandomMovie();
       if (movie) {
         setRandomMovie(movie);
       } else {
