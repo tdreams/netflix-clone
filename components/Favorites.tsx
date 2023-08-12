@@ -23,7 +23,7 @@ const Favorites = ({ title }: FavoritesProps) => {
     };
 
     fetchFavoriteMovies();
-  }, []);
+  }, [favoriteMovies]);
   console.log("Favorite Movies Array:", favoriteMovies);
   return (
     <div className="px-4 md:px-12 mt-4 space-y-8">
