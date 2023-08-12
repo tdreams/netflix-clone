@@ -1,7 +1,6 @@
 import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
-import { without } from "lodash";
 
 export async function DELETE(req: Request) {
   try {
@@ -12,6 +11,7 @@ export async function DELETE(req: Request) {
         status: 401,
       });
     }
+
     // Parse the request body by reading it as JSON
     const requestBody = await req.json();
     const { movieId } = requestBody;
@@ -22,28 +22,47 @@ export async function DELETE(req: Request) {
       },
     });
     if (!existingMovie) {
-      throw new Error("invalid ID");
+      return new NextResponse("Invalid Movie ID", {
+        status: 400,
+      });
     }
 
     const user = await prismadb.user.findUnique({
       where: {
-        id: userId,
+        externalId: userId,
+      },
+      include: {
+        favoriteMovies: {
+          where: {
+            movieId,
+          },
+        },
       },
     });
     if (!user) {
-      throw new Error("User not found");
+      return new NextResponse("User not found", {
+        status: 404,
+      });
     }
 
-    // Remove the selected movie ID from the favorite list
-    const updatedFavoriteIds = without(user.favoriteMovieIds, movieId);
-    // Update the user's record with the modified favorite list
-    const updatedUser = await prismadb.user.update({
-      where: { id: userId },
-      data: {
-        favoriteMovieIds: updatedFavoriteIds,
+    if (user.favoriteMovies.length === 0) {
+      return new NextResponse("Movie not found in user's favorites", {
+        status: 400,
+      });
+    }
+
+    // Remove the relation between the user and the movie in UserMovie model
+    const remove = await prismadb.userMovie.delete({
+      where: {
+        id: user.favoriteMovies[0].id, // Assuming there's only one relation entry per movie
       },
     });
-    return NextResponse.json(updatedUser);
+
+    return new NextResponse(JSON.stringify(remove), {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
   } catch (e) {
     console.error("[REMOVE_FAVORITE_MOVIE]", e);
     return new NextResponse("Internal Error", { status: 500 });
