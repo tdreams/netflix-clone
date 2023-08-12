@@ -1,6 +1,6 @@
+import UseAddFavorite from "@/hooks/useAddFavorite";
 import React, { useEffect, useState } from "react";
-import useAddFavorite from "@/hooks/useAddFavorite";
-useAddFavorite;
+
 import { AiOutlinePlus } from "react-icons/ai";
 
 interface FavoriteButtonProps {
@@ -13,7 +13,7 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
 
   const handleAddFavorite = async () => {
     try {
-      const result = await useAddFavorite(movieId);
+      const result = await UseAddFavorite(movieId);
       if (result) {
         console.log("Movie added to favorites", result);
         setIsAdded(true);
