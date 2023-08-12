@@ -1,43 +1,31 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import FavoriteButton from "./FavoriteButton";
-
 import { Movie } from "@/types";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
 import { BsFillPlayFill } from "react-icons/bs";
-import { useRouter } from "next/navigation";
 import { BiChevronDown } from "react-icons/bi";
-import UseFavorites from "@/hooks/useFavorites";
+import useSWR from "swr"; // Import the useSWR hook
+import fetcher from "@/hooks/useFav";
+import FavoriteButton from "./FavoriteButton";
 
 interface FavoritesProps {
   title: string;
 }
 
-const Favorites = ({ title }: FavoritesProps) => {
-  const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
+const Fav = ({ title }: FavoritesProps) => {
+  const { data: favoriteMovies, error } = useSWR("/api/favorites", fetcher);
 
-  const fetchFavoriteMovies = async () => {
-    const favoriteMoviesList = await UseFavorites();
-    setFavoriteMovies(favoriteMoviesList);
-  };
+  if (error) {
+    return <div>Error fetching favorite movies</div>;
+  }
 
-  useEffect(() => {
-    fetchFavoriteMovies();
-  }, []);
-
-  const handleFavoriteUpdated = async () => {
-    // Fetch favorite movies again when a movie is added/removed
-    await fetchFavoriteMovies();
-  };
-  console.log("Favorite Movies Array:", favoriteMovies);
   return (
     <div className="px-4 md:px-12 mt-4 space-y-8">
       <div className="text-white text-base md:text-xl lg:text-2xl font-semibold">
         <p>{title}</p>
       </div>
       <div className="grid grid-cols-4 gap-2">
-        {favoriteMovies.length > 0 ? (
-          favoriteMovies.map((movie) => (
+        {favoriteMovies?.favorites.length > 0 ? (
+          favoriteMovies?.favorites.map((movie: Movie) => (
             <Card
               key={movie.id}
               className=" bg-zinc-900 col-span-1 h-[12vw] relative  group border-0 transition-transform duration-300 "
@@ -61,10 +49,7 @@ const Favorites = ({ title }: FavoritesProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton
-                      movieId={movie?.id}
-                      onClick={handleFavoriteUpdated}
-                    />
+                    <FavoriteButton movieId={movie?.id} />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
                       onClick={() => {}}
@@ -99,4 +84,4 @@ const Favorites = ({ title }: FavoritesProps) => {
   );
 };
 
-export default Favorites;
+export default Fav;

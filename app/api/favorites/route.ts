@@ -8,18 +8,18 @@ export async function GET(req: Request) {
     /* const queryParams = new URLSearchParams(req.url.split("?")[1]);
     const userId = queryParams.get("userId"); */
 
-    const user = await currentUser();
+    const { userId } = auth();
 
-    if (!user) {
+    if (!userId) {
       return new NextResponse("Missing userId in query parameters", {
         status: 400,
       });
     }
 
     // Find the user in the database
-    const userdb = await prismadb.user.findUnique({
+    const user = await prismadb.user.findUnique({
       where: {
-        externalId: user.id,
+        externalId: userId,
       },
       include: {
         favoriteMovies: {
@@ -30,13 +30,13 @@ export async function GET(req: Request) {
       },
     });
 
-    if (!userdb) {
+    if (!user) {
       return new NextResponse("User not found", {
         status: 404,
       });
     }
 
-    const favoriteMovies = userdb.favoriteMovies.map(
+    const favoriteMovies = user.favoriteMovies.map(
       (userMovie) => userMovie.movie
     );
 

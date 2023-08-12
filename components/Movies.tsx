@@ -31,7 +31,7 @@ const Movies = ({ title }: MovieProps) => {
   useEffect(() => {
     const fetchData = async () => {
       const fetchedMovies = await fetchMovies();
-      console.log(fetchedMovies);
+      /* console.log(fetchedMovies); */
       if (fetchedMovies) {
         setMovies(fetchedMovies);
         setIsLoading(false); // Set loading to false when data is fetched
