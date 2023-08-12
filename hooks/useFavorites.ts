@@ -4,8 +4,8 @@ import { Movie } from "@/types";
 const UseFavorites = async () => {
   try {
     const response = await axios.get("http://localhost:3000/api/favorites");
-    //console.log("list Favorites", response.data);
-    if (response.data.length > 0) {
+    console.log("list Favorites", response.data);
+    if (Array.isArray(response.data) && response.data.length > 0) {
       const favoriteMovies: Movie[] = response.data;
       return favoriteMovies;
     }

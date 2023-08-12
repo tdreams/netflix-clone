@@ -1,8 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import FetchMovies from "@/hooks/useMovieList";
+import fetchMovies from "@/hooks/useMovieList";
 import { Movie } from "@/types";
-import { useRouter } from "next/navigation";
 import { BsFillPlayFill } from "react-icons/bs";
 import { BiChevronDown } from "react-icons/bi";
 
@@ -23,7 +22,6 @@ interface MovieProps {
 }
 
 const Movies = ({ title }: MovieProps) => {
-  const router = useRouter();
   const [movies, setMovies] = useState<Movie[] | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
@@ -32,8 +30,8 @@ const Movies = ({ title }: MovieProps) => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fetchedMovies = await FetchMovies();
-      //console.log(fetchedMovies);
+      const fetchedMovies = await fetchMovies();
+      console.log(fetchedMovies);
       if (fetchedMovies) {
         setMovies(fetchedMovies);
         setIsLoading(false); // Set loading to false when data is fetched
@@ -74,9 +72,7 @@ const Movies = ({ title }: MovieProps) => {
                   <div className="flex flex-row items-center gap-3">
                     <div
                       className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300"
-                      onClick={() => {
-                        router.push(`/watch/${movie?.id}`);
-                      }}
+                      onClick={() => {}}
                     >
                       <BsFillPlayFill size={20} />
                     </div>

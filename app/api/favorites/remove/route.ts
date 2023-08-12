@@ -1,64 +1,51 @@
+import { auth, currentUser } from "@clerk/nextjs";
 import { NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
-import { auth } from "@clerk/nextjs";
+import { without } from "lodash";
 
 export async function DELETE(req: Request) {
   try {
     const { userId } = auth();
-
-    if (!userId) {
-      return new NextResponse("Missing userId in query parameters", {
-        status: 400,
+    const userCurrent = await currentUser();
+    if (!userId || !userCurrent) {
+      return new NextResponse("Unauthorized", {
+        status: 401,
       });
     }
+    // Parse the request body by reading it as JSON
     const requestBody = await req.json();
     const { movieId } = requestBody;
 
-    if (!movieId) {
-      return new NextResponse("Missing movieId in request body", {
-        status: 400,
-      });
+    const existingMovie = await prismadb.movie.findUnique({
+      where: {
+        id: movieId,
+      },
+    });
+    if (!existingMovie) {
+      throw new Error("invalid ID");
     }
 
-    // Find the user in the database
     const user = await prismadb.user.findUnique({
       where: {
-        externalId: userId,
+        id: userId,
       },
     });
-
     if (!user) {
-      return new NextResponse("User not found", {
-        status: 404,
-      });
+      throw new Error("User not found");
     }
 
-    // Find the UserMovie entry to remove
-    const existingUserMovie = await prismadb.userMovie.findFirst({
-      where: {
-        userId: user.id,
-        movieId,
+    // Remove the selected movie ID from the favorite list
+    const updatedFavoriteIds = without(user.favoriteMovieIds, movieId);
+    // Update the user's record with the modified favorite list
+    const updatedUser = await prismadb.user.update({
+      where: { id: userId },
+      data: {
+        favoriteMovieIds: updatedFavoriteIds,
       },
     });
-
-    if (!existingUserMovie) {
-      return new NextResponse("UserMovie not found", {
-        status: 404,
-      });
-    }
-
-    // Delete the UserMovie entry
-    const remove = await prismadb.userMovie.delete({
-      where: {
-        id: existingUserMovie.id,
-      },
-    });
-
-    return NextResponse.json(remove);
+    return NextResponse.json(updatedUser);
   } catch (e) {
-    console.error("[REMOVE_FAVORITE]", e);
-    return new NextResponse("Internal Error", {
-      status: 500,
-    });
+    console.error("[REMOVE_FAVORITE_MOVIE]", e);
+    return new NextResponse("Internal Error", { status: 500 });
   }
 }
