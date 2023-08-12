@@ -4,7 +4,6 @@ import Navbar from "@/components/Navbar";
 import Billboard from "@/components/Billboard";
 import Movies from "@/components/Movies";
 import Favorites from "@/components/Favorites";
-import Fav from "@/components/Fav";
 
 const rootPage = async () => {
   const user = await currentUser();
