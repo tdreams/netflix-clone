@@ -16,7 +16,7 @@ const FavoriteButton = ({
   const [isAdded, setIsAdded] = useState(false);
   const [error, setError] = useState("");
 
-  const checkIfMovieIsAdded = async () => {
+  const CheckIfMovieIsAdded = async () => {
     try {
       const favoritesMovies = await useFavorites();
       const isMovieInFavorites = favoritesMovies.some(
@@ -29,7 +29,7 @@ const FavoriteButton = ({
   };
 
   useEffect(() => {
-    checkIfMovieIsAdded();
+    CheckIfMovieIsAdded();
   }, [movieId]);
 
   const handleAddFavorite = async () => {
@@ -39,7 +39,7 @@ const FavoriteButton = ({
         const remove = await UseRemoveFavorite(movieId);
         if (remove) {
           setIsAdded(false);
-          checkIfMovieIsAdded();
+          CheckIfMovieIsAdded();
           if (typeof onFavoriteUpdated === "function") {
             await onFavoriteUpdated(); // Trigger update in Favorites component
           }
@@ -51,7 +51,7 @@ const FavoriteButton = ({
         const add = await UseAddFavorite(movieId);
         if (add) {
           setIsAdded(true);
-          checkIfMovieIsAdded();
+          CheckIfMovieIsAdded();
           if (typeof onFavoriteUpdated === "function") {
             await onFavoriteUpdated(); // Trigger update in Favorites component
           }
