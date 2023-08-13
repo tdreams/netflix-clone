@@ -10,7 +10,7 @@ import { Movie } from "@/types";
 import { cn } from "@/lib/utils";
 
 interface InfoModalProps {
-  visible: boolean;
+  visible?: boolean;
   onClose: any;
 }
 

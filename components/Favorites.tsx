@@ -14,6 +14,7 @@ interface FavoritesProps {
 }
 
 const Favorites = ({ title }: FavoritesProps) => {
+  const router = useRouter();
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
 
   const fetchFavoriteMovies = async () => {
@@ -53,7 +54,7 @@ const Favorites = ({ title }: FavoritesProps) => {
                   <div className="flex flex-row items-center gap-3">
                     <div
                       className="cursor-pointer w-6 h-6 lg:w-10 lg:h-10 bg-white rounded-full flex justify-center items-center transition hover:bg-neutral-300"
-                      onClick={() => {}}
+                      onClick={() => router.push(`/watch/${movie?.id}`)}
                     >
                       <BsFillPlayFill size={20} />
                     </div>

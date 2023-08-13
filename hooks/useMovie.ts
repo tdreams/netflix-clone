@@ -3,7 +3,7 @@ import { Movie } from "@/types";
 
 const UseMovie = async (movieId: string | undefined) => {
   try {
-    const response = await axios.get(`/api/movies/${movieId}`);
+    const response = await axios.get(movieId ? `/api/movies/${movieId}` : "");
     if (response.status === 200) {
       const movie: Movie = response.data;
       return movie;
