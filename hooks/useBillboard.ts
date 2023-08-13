@@ -1,11 +1,12 @@
-import axios from "axios";
 import { Movie } from "@/types";
 
 const FetchRandomMovie = async () => {
   try {
-    const response = await axios.get("http://localhost:3000/api/random");
-    if (response.data.length > 0) {
-      const randomMovie: Movie = response.data[0];
+    const response = await fetch("http://localhost:3000/api/random");
+    const data = await response.json();
+
+    if (data.length > 0) {
+      const randomMovie: Movie = data[0];
       return randomMovie;
     }
   } catch (e) {
