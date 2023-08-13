@@ -2,7 +2,7 @@ import axios from "axios";
 
 const UseRemoveFavorite = async (movieId: string | undefined) => {
   try {
-    const response = await axios.post("/api/favorites/remove", {
+    const response = await axios.delete("/api/favorites/remove", {
       data: { movieId },
     });
     if (response.status === 200) {

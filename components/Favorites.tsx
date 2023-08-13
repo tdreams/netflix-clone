@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import FavoriteButton from "./FavoriteButton";
+import UseInfoModal from "@/hooks/useInfoModel";
 
 import { Movie } from "@/types";
 import { Card, CardContent, CardDescription } from "@/components/ui/card";
@@ -15,6 +16,7 @@ interface FavoritesProps {
 
 const Favorites = ({ title }: FavoritesProps) => {
   const router = useRouter();
+  const { openModal } = UseInfoModal();
   const [favoriteMovies, setFavoriteMovies] = useState<Movie[]>([]);
 
   const fetchFavoriteMovies = async () => {
@@ -25,6 +27,10 @@ const Favorites = ({ title }: FavoritesProps) => {
   useEffect(() => {
     fetchFavoriteMovies();
   }, []);
+
+  const handleFavoriteUpdated = async () => {
+    await fetchFavoriteMovies();
+  };
 
   console.log("Favorite Movies Array:", favoriteMovies);
   return (
@@ -58,10 +64,13 @@ const Favorites = ({ title }: FavoritesProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton movieId={movie?.id} />
+                    <FavoriteButton
+                      movieId={movie?.id}
+                      onFavoriteUpdated={handleFavoriteUpdated}
+                    />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
-                      onClick={() => {}}
+                      onClick={() => openModal(movie?.id)}
                     >
                       <BiChevronDown
                         size={30}

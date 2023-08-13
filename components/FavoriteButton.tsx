@@ -1,27 +1,70 @@
-import UseAddFavorite from "@/hooks/useAddFavorite";
 import React, { useEffect, useState } from "react";
-
-import { AiOutlinePlus } from "react-icons/ai";
+import UseAddFavorite from "@/hooks/useAddFavorite";
+import UseRemoveFavorite from "@/hooks/useRemoveFavorite";
+import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai";
+import useFavorites from "@/hooks/useFavorites";
 
 interface FavoriteButtonProps {
   movieId: string | undefined;
+  onFavoriteUpdated?: () => Promise<void>;
 }
 
-const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
+const FavoriteButton = ({
+  movieId,
+  onFavoriteUpdated,
+}: FavoriteButtonProps) => {
   const [isAdded, setIsAdded] = useState(false);
   const [error, setError] = useState("");
 
+  const checkIfMovieIsAdded = async () => {
+    try {
+      const favoritesMovies = await useFavorites();
+      const isMovieInFavorites = favoritesMovies.some(
+        (movie) => movie.id === movieId
+      );
+      setIsAdded(isMovieInFavorites);
+    } catch (e) {
+      console.error("Error checking favorites movies", e);
+    }
+  };
+
+  useEffect(() => {
+    checkIfMovieIsAdded();
+  }, [movieId]);
+
   const handleAddFavorite = async () => {
     try {
-      const result = await UseAddFavorite(movieId);
-      if (result) {
-        console.log("Movie added to favorites", result);
-        setIsAdded(true);
+      if (isAdded) {
+        //Remove the movie from favorites
+        const remove = await UseRemoveFavorite(movieId);
+        if (remove) {
+          setIsAdded(false);
+          checkIfMovieIsAdded();
+          if (typeof onFavoriteUpdated === "function") {
+            await onFavoriteUpdated(); // Trigger update in Favorites component
+          }
+        } else {
+          console.log("Failed to remove movie from favorite");
+        }
       } else {
-        console.log("Failed to add movie to favorites");
+        //Add the movie to favorites
+        const add = await UseAddFavorite(movieId);
+        if (add) {
+          setIsAdded(true);
+          checkIfMovieIsAdded();
+          if (typeof onFavoriteUpdated === "function") {
+            await onFavoriteUpdated(); // Trigger update in Favorites component
+          }
+        } else {
+          console.log("Failed to add movie to favorite");
+        }
       }
     } catch (e) {
-      setError("Failed to add movie to favorites.Please try again");
+      setError(
+        isAdded
+          ? "Failed to remove movie from favorites"
+          : "Failed to add movie to favorites"
+      );
     }
   };
 
@@ -32,7 +75,11 @@ const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
           onClick={handleAddFavorite}
           className="rounded-full cursor-pointer group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 flex justify-center items-center transition hover:border-neutral-300"
         >
-          <AiOutlinePlus className="text-white" size={15} />
+          {isAdded ? (
+            <AiOutlineCheck className="text-white" size={15} />
+          ) : (
+            <AiOutlinePlus className="text-white" size={15} />
+          )}
         </button>
       </div>
     </div>

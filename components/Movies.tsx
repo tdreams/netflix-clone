@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/card";
 
 import FavoriteButton from "./FavoriteButton";
-import useInfoModal from "@/hooks/useInfoModel";
+import UseInfoModal from "@/hooks/useInfoModel";
 
 interface MovieProps {
   title: string;
@@ -28,7 +28,7 @@ const Movies = ({ title }: MovieProps) => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
 
-  const { openModal } = useInfoModal();
+  const { openModal } = UseInfoModal();
 
   useEffect(() => {
     const fetchData = async () => {

@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import useMovie from "@/hooks/useMovie";
+import UseMovie from "@/hooks/useMovie";
 import { Movie } from "@/types";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 import Link from "next/link";
@@ -10,7 +10,7 @@ const Watch = ({ params }: { params: { movieId: string } }) => {
 
   useEffect(() => {
     const fetchMovie = async () => {
-      const fetchedMovie = await useMovie(params.movieId);
+      const fetchedMovie = await UseMovie(params.movieId);
       setMovie(fetchedMovie);
     };
 
