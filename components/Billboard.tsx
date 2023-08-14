@@ -23,11 +23,11 @@ const Billboard = () => {
     const handleIntersection: IntersectionObserverCallback = (entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          video?.play().catch((error) => {
+          videoRef.current?.play().catch((error) => {
             console.error("Video playback failed:", error);
           });
         } else {
-          video?.pause();
+          videoRef.current?.pause();
         }
       });
     };
