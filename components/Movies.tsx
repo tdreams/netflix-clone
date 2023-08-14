@@ -82,10 +82,7 @@ const Movies = ({ title }: MovieProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton
-                      movieId={movie?.id}
-                      onFavoriteUpdated={handleFavoriteUpdated}
-                    />
+                    <FavoriteButton movieId={movie?.id} />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
                       onClick={() => openModal(movie?.id)}
