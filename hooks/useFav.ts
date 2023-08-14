@@ -1,23 +1,29 @@
-import useSWR from "swr";
+"use client";
 
-// Fetcher function to get data from the API
-export const fetcher = async (url: string) => {
-  const response = await fetch(url);
-  console.log("Response status:", response.status);
-  if (!response.ok) {
-    throw new Error("An error occurred while fetching the data");
+import useSWR from "swr";
+import axios from "axios";
+import { Movie } from "@/types";
+
+const fetcher = async (url: string) => {
+  try {
+    const response = await axios.get(url);
+    if (Array.isArray(response.data) && response.data.length > 0) {
+      const favoriteMovies: Movie[] = response.data;
+      return favoriteMovies;
+    }
+  } catch (e) {
+    throw new Error("Error fetching favorite movies");
   }
-  return response.json();
 };
 
-// Custom hook to fetch favorites data
 const UseFav = () => {
-  const { data, error } = useSWR("/api/favorites", fetcher);
+  const { data, error, isLoading, mutate } = useSWR("/api/favorites", fetcher);
 
   return {
-    favorites: data,
-    isLoading: !error && !data,
-    isError: error,
+    data,
+    error,
+    isLoading,
+    mutate,
   };
 };
 

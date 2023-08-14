@@ -29,21 +29,25 @@ const Movies = ({ title }: MovieProps) => {
   const [isError, setIsError] = useState(false);
 
   const { openModal } = UseInfoModal();
+  const fetchData = async () => {
+    const fetchedMovies = await fetchMovies();
+    /* console.log(fetchedMovies); */
+    if (fetchedMovies) {
+      setMovies(fetchedMovies);
+      setIsLoading(false); // Set loading to false when data is fetched
+    } else {
+      setIsError(true);
+      setIsLoading(false); // Set loading to false on error as well
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      const fetchedMovies = await fetchMovies();
-      /* console.log(fetchedMovies); */
-      if (fetchedMovies) {
-        setMovies(fetchedMovies);
-        setIsLoading(false); // Set loading to false when data is fetched
-      } else {
-        setIsError(true);
-        setIsLoading(false); // Set loading to false on error as well
-      }
-    };
     fetchData();
   }, []);
+
+  const handleFavoriteUpdated = async () => {
+    await fetchData();
+  };
 
   return (
     <div className="px-4 md:px-12 mt-4 space-y-8">
@@ -64,7 +68,7 @@ const Movies = ({ title }: MovieProps) => {
                 alt="Thumbnail"
                 className="w-full h-full object-cover cursor-pointer transition duration-0 shadow-xl group-hover:opacity-0 sm:group-hover:opacity-0 delay-300 rounded-md"
               />
-              <div className="opacity-0 absolute top-0 transition duration-300 z-10 invisible sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100 ">
+              <div className="opacity-0 absolute top-0 transition duration-300 z-10  sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100 ">
                 <img
                   src={movie.thumbnailUrl}
                   alt="Thumbnail"
@@ -78,7 +82,10 @@ const Movies = ({ title }: MovieProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton movieId={movie?.id} />
+                    <FavoriteButton
+                      movieId={movie?.id}
+                      onFavoriteUpdated={handleFavoriteUpdated}
+                    />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
                       onClick={() => openModal(movie?.id)}

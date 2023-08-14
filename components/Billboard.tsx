@@ -1,16 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import fetchRandomMovie from "@/hooks/useBillboard";
 import { Movie } from "@/types";
 import { Button } from "./ui/button";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import PlayButton from "./PlayButton";
+import UseInfoModal from "@/hooks/useInfoModel";
 
 const Billboard = () => {
   const [randomMovie, setRandomMovie] = useState<Movie | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
+  const { openModal } = UseInfoModal();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +34,7 @@ const Billboard = () => {
   if (isError) {
     return <p>Error loading data</p>;
   }
+
   return (
     <div className="relative h-[56.25vw]">
       {randomMovie && (
@@ -53,7 +56,10 @@ const Billboard = () => {
             </p>
             <div className="flex mt-3 md:mt-4 gap-3">
               <PlayButton movieId={randomMovie?.id} />
-              <Button className="text-white bg-white/30 hover:bg-white/20 transition md:py-2 md:px-4">
+              <Button
+                className="text-white bg-white/30 hover:bg-white/20 transition md:py-2 md:px-4"
+                onClick={() => openModal(randomMovie?.id)}
+              >
                 <AiOutlineInfoCircle className="mr-1" />
                 More Info
               </Button>

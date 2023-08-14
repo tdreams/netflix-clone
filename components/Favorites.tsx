@@ -50,7 +50,7 @@ const Favorites = ({ title }: FavoritesProps) => {
                 alt="Thumbnail"
                 className="w-full h-full object-cover cursor-pointer transition duration-0 shadow-xl group-hover:opacity-0 sm:group-hover:opacity-0 delay-300 rounded-md"
               />
-              <div className="opacity-0 absolute top-0 transition duration-300 z-10 invisible sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100 ">
+              <div className="opacity-0 absolute top-0 transition duration-300 z-10  sm:visible delay-300 w-full scale-0 group-hover:scale-110 group-hover:-translate-y-[6vw] group-hover:translate-x-[2vw] group-hover:opacity-100 ">
                 <img
                   src={movie.thumbnailUrl}
                   alt="Thumbnail"
@@ -64,10 +64,7 @@ const Favorites = ({ title }: FavoritesProps) => {
                     >
                       <BsFillPlayFill size={20} />
                     </div>
-                    <FavoriteButton
-                      movieId={movie?.id}
-                      onFavoriteUpdated={handleFavoriteUpdated}
-                    />
+                    <FavoriteButton movieId={movie?.id} />
                     <div
                       className="cursor-pointer ml-auto group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full justify-center flex items-center transition hover:border-neutral-300"
                       onClick={() => openModal(movie?.id)}

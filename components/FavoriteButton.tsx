@@ -1,87 +1,50 @@
-import React, { useEffect, useState } from "react";
-import UseAddFavorite from "@/hooks/useAddFavorite";
-import UseRemoveFavorite from "@/hooks/useRemoveFavorite";
+"use client";
+import axios from "axios";
 import { AiOutlinePlus, AiOutlineCheck } from "react-icons/ai";
-import UseFavorites from "@/hooks/useFavorites";
+import React, { useCallback, useMemo } from "react";
+import UseFav from "@/hooks/useFav";
+import UseCurrentUser from "@/hooks/useCurrentUser";
 
 interface FavoriteButtonProps {
   movieId: string | undefined;
-  onFavoriteUpdated?: () => Promise<void>;
 }
 
-const FavoriteButton = ({
-  movieId,
-  onFavoriteUpdated,
-}: FavoriteButtonProps) => {
-  const [isAdded, setIsAdded] = useState(false);
-  const [error, setError] = useState("");
+const FavoriteButton = ({ movieId }: FavoriteButtonProps) => {
+  const { data: favoriteMovies, mutate: mutateFavorites } = UseFav();
+  const { data: currentUser, mutate } = UseCurrentUser();
 
-  const CheckIfMovieIsAdded = async () => {
-    try {
-      const favoritesMovies = await UseFavorites();
-      const isMovieInFavorites = favoritesMovies.some(
-        (movie) => movie.id === movieId
-      );
-      setIsAdded(isMovieInFavorites);
-    } catch (e) {
-      console.error("Error checking favorites movies", e);
+  const isMovieInFavorite = favoriteMovies?.some(
+    (movie) => movie.id === movieId
+  );
+
+  const toggleFavorites = useCallback(async () => {
+    let response;
+    if (isMovieInFavorite) {
+      response = await axios.delete("/api/favorites/remove", {
+        data: { movieId },
+      });
+    } else {
+      response = await axios.post("/api/favorites/add", {
+        movieId,
+      });
     }
-  };
 
-  useEffect(() => {
-    CheckIfMovieIsAdded();
-  }, [movieId]);
+    const updateFavoriteIds = response?.data.favoriteMovies;
 
-  const handleAddFavorite = async () => {
-    try {
-      if (isAdded) {
-        //Remove the movie from favorites
-        const remove = await UseRemoveFavorite(movieId);
-        if (remove) {
-          setIsAdded(false);
-          CheckIfMovieIsAdded();
-          if (typeof onFavoriteUpdated === "function") {
-            await onFavoriteUpdated(); // Trigger update in Favorites component
-          }
-        } else {
-          console.log("Failed to remove movie from favorite");
-        }
-      } else {
-        //Add the movie to favorites
-        const add = await UseAddFavorite(movieId);
-        if (add) {
-          setIsAdded(true);
-          CheckIfMovieIsAdded();
-          if (typeof onFavoriteUpdated === "function") {
-            await onFavoriteUpdated(); // Trigger update in Favorites component
-          }
-        } else {
-          console.log("Failed to add movie to favorite");
-        }
-      }
-    } catch (e) {
-      setError(
-        isAdded
-          ? "Failed to remove movie from favorites"
-          : "Failed to add movie to favorites"
-      );
-    }
-  };
+    mutate({
+      ...currentUser,
+      favoriteMovies: updateFavoriteIds,
+    });
+    mutateFavorites();
+  }, [movieId, isMovieInFavorite, currentUser, mutate, mutateFavorites]);
 
+  const Icon = isMovieInFavorite ? AiOutlineCheck : AiOutlinePlus;
   return (
-    <div>
-      <div>
-        <button
-          onClick={handleAddFavorite}
-          className="rounded-full cursor-pointer group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 flex justify-center items-center transition hover:border-neutral-300"
-        >
-          {isAdded ? (
-            <AiOutlineCheck className="text-white" size={15} />
-          ) : (
-            <AiOutlinePlus className="text-white" size={15} />
-          )}
-        </button>
-      </div>
+    <div
+      onClick={toggleFavorites}
+      className="cursor-pointer group/item w-6 h-6 lg:w-10 lg:h-10 border-white border-2 rounded-full flex justify-center items-center transition hover:border-neutral-300"
+    >
+      <Icon className="text-white group-hover/item:text-neutral-300 w-4 lg:w-6" />
     </div>
   );
 };
