@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import fetchRandomMovie from "@/hooks/useBillboard";
 import { Movie } from "@/types";
 import { Button } from "./ui/button";
@@ -13,6 +13,34 @@ const Billboard = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const { openModal } = UseInfoModal();
+
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+    let observer: IntersectionObserver;
+
+    const handleIntersection: IntersectionObserverCallback = (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          video?.play().catch((error) => {
+            console.error("Video playback failed:", error);
+          });
+        } else {
+          video?.pause();
+        }
+      });
+    };
+
+    observer = new IntersectionObserver(handleIntersection);
+    observer.observe(video);
+
+    return () => {
+      if (observer) {
+        observer.unobserve(video);
+      }
+    };
+  }, []);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -41,6 +69,7 @@ const Billboard = () => {
         <div>
           <video
             className="w-full h-[56.25vw] object-cover brightness-[60%]"
+            ref={videoRef}
             autoPlay
             muted
             loop
