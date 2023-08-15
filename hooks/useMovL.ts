@@ -19,7 +19,7 @@ const FetchMov = () => {
   return {
     data,
     error,
-    isLoading,
+    isLoading: isLoading,
   };
 };
 

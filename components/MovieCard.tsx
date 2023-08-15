@@ -14,16 +14,21 @@ import {
 
 import FavoriteButton from "./FavoriteButton";
 import UseInfoModal from "@/hooks/useInfoModel";
+import { Skeleton } from "./ui/skeleton";
 
 interface MovieCardProps {
   data: Movie;
+  isLoading: boolean;
 }
 
-const MovieCard = ({ data }: MovieCardProps) => {
+const MovieCard = ({ data, isLoading }: MovieCardProps) => {
   const router = useRouter();
 
   const { openModal } = UseInfoModal();
 
+  if (isLoading) {
+    return <Skeleton className="h-[12vw] brightness-[60%]" />;
+  }
   return (
     <Card className=" bg-zinc-900 col-span-1 h-[12vw] relative  group border-0 transition-transform duration-300 ">
       <img

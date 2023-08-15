@@ -7,6 +7,7 @@ import { Button } from "./ui/button";
 import { AiOutlineInfoCircle } from "react-icons/ai";
 import PlayButton from "./PlayButton";
 import UseInfoModal from "@/hooks/useInfoModel";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Billboard = () => {
   const [randomMovie, setRandomMovie] = useState<Movie | null>(null);
@@ -56,7 +57,7 @@ const Billboard = () => {
   }, []);
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <Skeleton className="w-full h-[56.25vw] brightness-[60%]" />;
   }
 
   if (isError) {

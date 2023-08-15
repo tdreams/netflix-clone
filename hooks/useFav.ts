@@ -22,7 +22,7 @@ const UseFav = () => {
   return {
     data,
     error,
-    isLoading,
+    isLoading: isLoading,
     mutate,
   };
 };
