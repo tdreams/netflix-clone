@@ -8,16 +8,12 @@ import { Skeleton } from "./ui/skeleton";
 interface MovieListProps {
   data: Movie[];
   title: string;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const MovieList: React.FC<MovieListProps> = ({ data, title, isLoading }) => {
   if (isEmpty(data)) {
     return null;
-  }
-
-  if (isLoading) {
-    return <Skeleton className=" h-[12vw] brightness-[60%]" />;
   }
 
   return (

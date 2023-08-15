@@ -18,7 +18,7 @@ import { Skeleton } from "./ui/skeleton";
 
 interface MovieCardProps {
   data: Movie;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
 const MovieCard = ({ data, isLoading }: MovieCardProps) => {

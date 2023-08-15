@@ -9,6 +9,7 @@ export default authMiddleware({
     "/api/movies",
     "/api/random",
     "/api/favorites",
+    "/profiles",
   ],
   ignoredRoutes: ["/((?!api|trpc))(_next|.+..+)(.*)"],
 });

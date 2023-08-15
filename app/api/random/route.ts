@@ -5,7 +5,7 @@ import prismadb from "@/lib/prismadb";
 export async function GET() {
   try {
     const user = await currentUser();
-    console.log(" and currentUser: ", user, user?.id, user?.username);
+    /* console.log(" and currentUser: ", user, user?.id, user?.username); */
 
     if (!user?.id) {
       return new NextResponse("Unauthorized", {

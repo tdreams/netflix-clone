@@ -14,8 +14,11 @@ const AuthLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <div className="">
       {children}
-      <MovieList title="Trending Now" data={movies} isLoading={isLoading} />
-      <MovieList title="My List" data={favorites} isLoading={isLoading} />
+      <div className="pb-40">
+        <MovieList title="Trending Now" data={movies} />
+        <MovieList title="My List" data={favorites} isLoading={isLoading} />
+      </div>
+
       <div className="">
         <InfoModal visible={isOpen} onClose={closeModal} />
       </div>

@@ -22,7 +22,7 @@ const AccountMenu = ({ visible }: AccountMenuProps) => {
             alt="Logo"
           />
           <p className="text-white text-sm group-hover/item:underline">
-            {user?.firstName}
+            {user?.firstName || user?.username}
           </p>
         </div>
         <hr className="bg-gray-600 border-0 h-px my-4" />
